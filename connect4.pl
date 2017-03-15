@@ -75,6 +75,8 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     not(V == v).
 
 %aligneVertical/3
+%Vérifie que un nombre de jetons de la couleur spécifié est aligné et utilisable
+%Un alignement est utilisable si le jeton au dessus de la pile est vide
 aligneVertical(Grille,Jeton,Nb) :-
     matrix(Grille,R,C,Jeton),
     Rprecedente is R-1, 
@@ -82,9 +84,12 @@ aligneVertical(Grille,Jeton,Nb) :-
     %Cela signifie qu'on peut utiliser ce jeton pour gagner
     R1 is R+1,
     Nb1 is Nb-1,
-    write('R,C ='), write([R,C]), nl,
     aligneVertical(Grille,Jeton,Nb1,R1,C).
+
 %aligneVertical/5
+%Même chose que aligneVertical/3, sauf qu'on passe les coordonnées du jeton a vérifier
+
+%Cas de base:On vérifie que le jeton n'est pas au bout de l'alignement. On veut un alignement fixe.
 aligneVertical(Grille,Jeton,0,R,C) :-
     not(matrix(Grille,R,C,Jeton)).
 
@@ -94,6 +99,27 @@ aligneVertical(Grille,Jeton,Nb,R,C) :-
     Nb1 is Nb-1,
     aligneVertical(Grille,Jeton,Nb1,R1,C).
 
+%aligneHorizontal/3
+%Vérifie qu'un nombre de jetons de la couleur spécifié est aligné et utilisable
+%Un alignement est utilisable si la case à gauche et/ou à droite de la rangée est vide
+aligneHorizontal(Grille,Jeton,Nb) :-
+    matrix(Grille,R,C,Jeton),
+    Cprecedente is C-1, Csuivante is C+Nb,
+    %on vérifie si la case à gauche et/ou à droite de la rangée est vide
+    (matrix(Grille,R,Cprecedente,v);matrix(Grille,R,Csuivante,v)),
+    C1 is C+1,
+    Nb1 is Nb-1,
+    aligneHorizontal(Grille,Jeton,Nb1,R,C1).
+
+%aligneHorizontal/5
+%même chose que aligneHorizontal/3 mais on spécifie à quel endroit on veut rechercher.
+aligneHorizontal(Grille,Jeton,0,R,C) :-
+    not(matrix(Grille,R,C,Jeton)).
+aligneHorizontal(Grille,Jeton,Nb,R,C) :-
+    matrix(Grille,R,C,Jeton),
+    C1 is C+1,
+    Nb1 is Nb-1,
+    aligneHorizontal(Grille,Jeton,Nb1,R,C1).
 
 
 %afficheGrille/1
