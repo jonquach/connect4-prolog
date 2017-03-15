@@ -70,6 +70,12 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     not(V == v).
 
 
+aligneVertical4(Grille,Jeton) :-
+    matrix(Grille,R,C,Jeton),
+    R1 is R+1,R2 is R+2,R3 is R+3,
+    matrix(Grille,R1,C,Jeton),matrix(Grille,R2,C,Jeton),matrix(Grille,R3,C,Jeton).
+
+
 %afficheGrille/1
 %Affiche la grille au complet
 afficheGrille([C1,C2,C3,C4,C5,C6,C7]) :- 
