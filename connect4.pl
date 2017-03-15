@@ -122,6 +122,54 @@ aligneHorizontal(Grille,Jeton,Nb,R,C) :-
     aligneHorizontal(Grille,Jeton,Nb1,R,C1).
 
 
+%aligneDiagonalD/3
+aligneDiagonalD(Grille,Jeton,Nb) :-
+    matrix(Grille,R,C,Jeton),
+    Cprecedente is C-1, Rprecedente is R-1,
+    Csuivante is C+Nb,Rsuivante is C+Nb,
+    (matrix(Grille,Rprecedente,Cprecedente,v);matrix(Grille,Rsuivante,Csuivante,v)),
+    R1 is R+1, C1 is C+1,
+    Nb1 is Nb-1,
+    aligneDiagonalD(Grille,Jeton,Nb1,R1,C1).
+
+%aligneDiagonalD/5
+aligneDiagonalD(Grille,Jeton,0,R,C) :-
+    not(matrix(Grille,R,C,Jeton)).
+aligneDiagonalD(Grille,Jeton,Nb,R,C) :-
+    matrix(Grille,R,C,Jeton),
+    R1 is R+1, C1 is C+1,
+    Nb1 is Nb-1,
+    aligneDiagonalD(Grille,Jeton,Nb1,R1,C1).
+
+
+
+
+%aligneDiagonalM/3
+aligneDiagonalM(Grille,Jeton,Nb) :-
+    matrix(Grille,R,C,Jeton),
+    Cprecedente is C-1, Rprecedente is R+1,
+    Csuivante is C+Nb,Rsuivante is R-Nb,
+    (matrix(Grille,Rprecedente,Cprecedente,v);matrix(Grille,Rsuivante,Csuivante,v)),
+    R1 is R-1, C1 is C+1,
+    Nb1 is Nb-1,
+    aligneDiagonalM(Grille,Jeton,Nb1,R1,C1).   
+
+%aligneDiagonalM/5
+aligneDiagonalM(Grille,Jeton,0,R,C) :-
+    not(matrix(Grille,R,C,Jeton)).
+aligneDiagonalM(Grille,Jeton,Nb,R,C) :-
+    matrix(Grille,R,C,Jeton),
+    R1 is R-1, C1 is C+1,
+    Nb1 is Nb-1,
+    aligneDiagonalM(Grille,Jeton,Nb1,R1,C1).
+
+
+%alignementEstValide
+alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante) :-
+    (matrix(Grille,Rprecedente,Cprecedente,v),matrix(Grille,Rsuivante,Csuivante,v));
+    (not(matrix(Grille,Rprecedente,Cprecedente,Jeton)),matrix(Grille,Rsuivante,Csuivante,v));
+    ().
+
 %afficheGrille/1
 %Affiche la grille au complet
 afficheGrille([C1,C2,C3,C4,C5,C6,C7]) :- 
