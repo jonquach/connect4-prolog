@@ -224,16 +224,14 @@ coupsPossibles(Grille, Jeton, [RetourCoupPoss]) :-
 %coupsPossibles\4
 coupsPossibles(_,_,[],7).
 
-coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol)
+coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol) :-
     place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
 
-coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol)
+coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol) :-
     not(place_jeton(Jeton,NoCol, Grille, _)),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
-
-
-
+    
 
