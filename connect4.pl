@@ -15,8 +15,26 @@ go :- how_to_play,
 colonne_est_pleine(Grille,I) :- 
     nth0(I,Grille,Colonne),
     not(member(v,Colonne)).
+%colonne_est_pleine/1
+%Retourne vrai si la colonne en paramètres ne contient que des jetons
+colonne_est_pleine(Colonne) :-
+    not(member(v,Colonne)).
 
 
+%place_jeton/4
+%Place le jeton sur la colonne spécifié et retourne la nouvelle grille
+%Cas de base: Colonne 0
+place_jeton(Jeton,0,[CCourante|Reste],[Nouvelle_Colonne|Reste]) :-
+    not(colonne_est_pleine(CCourante)),
+    place_jeton_sur_colonne(Jeton,CCourante,Nouvelle_Colonne).
+
+place_jeton(Jeton,Colonne,[CCourante|Reste],[CCourante|Nouvelle_Grille]) :-
+    not(Colonne == 0),
+    NColonne is Colonne - 1,
+    place_jeton(Jeton,NColonne,Reste,Nouvelle_Grille).
+
+
+    
 %place_jeton_sur_colonne/3
 %Place le Jeton sur la colonne [Courant|Reste] et retourne la nouvelle colonne
 %avec le jeton ajouté
