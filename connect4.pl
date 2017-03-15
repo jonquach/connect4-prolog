@@ -208,30 +208,29 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
     
 strt(Grille) :- afficheGrille(Grille).
 
+
+
+%coupPossibles\3
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss]) :-
-place_jeton(Jeton,0, Grille, RetourPlaceJeton),
-coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss,1).
-
-
-
-coupsPossible(_,_,[],7).
+    place_jeton(Jeton,0, Grille, RetourPlaceJeton),
+    coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss,1).
 
 coupsPossibles(Grille, Jeton, [RetourCoupPoss]) :-
-not(place_jeton(Jeton,0, Grille, RetourPlaceJeton)),
-coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss,1).
+    not(place_jeton(Jeton,0, Grille, _)),
+    coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss,1).
 
-
+%coupsPossibles\4
+coupsPossible(_,_,[],7).
 
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol)
-place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
-C1 is NoCol + 1,
-coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
-
+    place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
+    C1 is NoCol + 1,
+    coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
 
 coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol)
-not(place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton)),
-C1 is NoCol + 1,
-coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
+    not(place_jeton(Jeton,NoCol, Grille, _)),
+    C1 is NoCol + 1,
+    coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss, C1).
 
 
 
