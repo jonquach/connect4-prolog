@@ -10,19 +10,30 @@ go :- how_to_play,
     [v,v,v,v,v,v],
     [v,v,v,v,v,v]]).
 
-%colonne_est_plein/2
+%colonne_est_pleine/2
 %Retourne vrai si la colonne spécifié ne contient que des jetons. Retourne faux sinon.
 colonne_est_pleine(Grille,I) :- 
     nth0(I,Grille,Colonne),
     not(member(v,Colonne)).
 
 
+%place_jeton_sur_colonne/3
+%Place le Jeton sur la colonne [Courant|Reste] et retourne la nouvelle colonne
+%avec le jeton ajouté
 
+%Cas ou jeton dernière case est vide 
+place_jeton_sur_colonne(Jeton,[v],[Jeton]).
 
+%Cas ou case suivante est vide
+place_jeton_sur_colonne(Jeton,[Courant|Reste],[Courant|Retour]) :-
+    nth0(0,Reste,V),
+    V == v,
+    place_jeton_sur_colonne(Jeton,Reste,Retour).
 
-
-
-
+%Cas ou case suivant appartient à un joueur
+place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
+    nth0(0,Reste,V),
+    not(V == v).
 
 
 
