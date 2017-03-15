@@ -74,6 +74,7 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     nth0(0,Reste,V),
     not(V == v).
 
+
 %aligneVertical/3
 %Vérifie que un nombre de jetons de la couleur spécifié est aligné et utilisable
 %Un alignement est utilisable si le jeton au dessus de la pile est vide
@@ -100,13 +101,12 @@ aligneVertical(Grille,Jeton,Nb,R,C) :-
     aligneVertical(Grille,Jeton,Nb1,R1,C).
 
 %aligneHorizontal/3
-%Vérifie qu'un nombre de jetons de la couleur spécifié est aligné et utilisable
-%Un alignement est utilisable si la case à gauche et/ou à droite de la rangée est vide
+%Vérifie qu'un nombre de jetons de la couleur spécifié est aligné et utilisable horizontalement
 aligneHorizontal(Grille,Jeton,Nb) :-
     matrix(Grille,R,C,Jeton),
     Cprecedente is C-1, Csuivante is C+Nb,
     %on vérifie si la case à gauche et/ou à droite de la rangée est vide
-    (matrix(Grille,R,Cprecedente,v);matrix(Grille,R,Csuivante,v)),
+    alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,R,R),
     C1 is C+1,
     Nb1 is Nb-1,
     aligneHorizontal(Grille,Jeton,Nb1,R,C1).
@@ -123,11 +123,12 @@ aligneHorizontal(Grille,Jeton,Nb,R,C) :-
 
 
 %aligneDiagonalD/3
+%Vérifie qu'un nombre de jetons de la couleur spécifié est aligné et utilisable diagonalement en descendant
 aligneDiagonalD(Grille,Jeton,Nb) :-
     matrix(Grille,R,C,Jeton),
     Cprecedente is C-1, Rprecedente is R-1,
     Csuivante is C+Nb,Rsuivante is C+Nb,
-    (matrix(Grille,Rprecedente,Cprecedente,v);matrix(Grille,Rsuivante,Csuivante,v)),
+    alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante),
     R1 is R+1, C1 is C+1,
     Nb1 is Nb-1,
     aligneDiagonalD(Grille,Jeton,Nb1,R1,C1).
@@ -142,14 +143,13 @@ aligneDiagonalD(Grille,Jeton,Nb,R,C) :-
     aligneDiagonalD(Grille,Jeton,Nb1,R1,C1).
 
 
-
-
 %aligneDiagonalM/3
+%Vérifie qu'un nombre de jetons de la couleur spécifié est aligné et utilisable diagonalement en montant
 aligneDiagonalM(Grille,Jeton,Nb) :-
     matrix(Grille,R,C,Jeton),
     Cprecedente is C-1, Rprecedente is R+1,
     Csuivante is C+Nb,Rsuivante is R-Nb,
-    (matrix(Grille,Rprecedente,Cprecedente,v);matrix(Grille,Rsuivante,Csuivante,v)),
+    alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante),
     R1 is R-1, C1 is C+1,
     Nb1 is Nb-1,
     aligneDiagonalM(Grille,Jeton,Nb1,R1,C1).   
@@ -164,11 +164,13 @@ aligneDiagonalM(Grille,Jeton,Nb,R,C) :-
     aligneDiagonalM(Grille,Jeton,Nb1,R1,C1).
 
 
-%alignementEstValide
+%alignementEstValide/4
+%Un alignement est utilisable si la case à gauche et/ou à droite de la rangée est vide ou
+%Si la case précédente est vide et la case suivante n'est pas occupé par le jeton ou vice-versa
 alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante) :-
     (matrix(Grille,Rprecedente,Cprecedente,v),matrix(Grille,Rsuivante,Csuivante,v));
     (not(matrix(Grille,Rprecedente,Cprecedente,Jeton)),matrix(Grille,Rsuivante,Csuivante,v));
-    ().
+    (matrix(Grille,Rprecedente,Cprecedente,v),not(matrix(Grille,Rsuivante,Csuivante,Jeton))).
 
 %afficheGrille/1
 %Affiche la grille au complet
