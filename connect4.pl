@@ -220,7 +220,7 @@ coupsPossibles(Grille, Jeton, [RetourCoupPoss]) :-
     coupsPossibles(Grille, Jeton, listeGrilles, RetourCoupPoss,1).
 
 %coupsPossibles\4
-coupsPossible(_,_,[],7).
+coupsPossibles(_,_,[],7).
 
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol)
     place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
