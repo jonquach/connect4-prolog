@@ -10,6 +10,22 @@ go :- how_to_play,
     [v,v,v,v,v,v],
     [v,v,v,v,v,v]]).
 
+
+%how_to_play/0
+%Prédicat d'affichage des règles
+how_to_play :-
+  write('Vous êtes le joueur rouge (r). Vous devez aligner 4 jetons horizontalement, verticalement ou diagonalement.'),
+  nl,
+  write('Choisissez la colonne ou vous voulez placer votre jeton (0-6)'),
+  nl.
+
+
+%matrix/4
+%Dans la grille, récupère la valeur à l'indice de la colonne et de la rangée désiré, et la mets dans Value
+matrix(Grille, IRangee,IColonne, Value) :-
+    nth0(IColonne, Grille, Colonne),
+    nth0(IRangee, Colonne, Value).
+
 %colonne_est_pleine/2
 %Retourne vrai si la colonne spécifié ne contient que des jetons. Retourne faux sinon.
 colonne_est_pleine(Grille,I) :- 
@@ -53,15 +69,6 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     nth0(0,Reste,V),
     not(V == v).
 
-
-
-%how_to_play/0
-%Prédicat d'affichage des règles
-how_to_play :-
-  write('Vous êtes le joueur rouge (r). Vous devez aligner 4 jetons horizontalement, verticalement ou diagonalement.'),
-  nl,
-  write('Choisissez la colonne ou vous voulez placer votre jeton (0-6)'),
-  nl.
 
 %afficheGrille/1
 %Affiche la grille au complet
