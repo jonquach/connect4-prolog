@@ -26,6 +26,11 @@ matrix(Grille, IRangee,IColonne, Value) :-
     nth0(IColonne, Grille, Colonne),
     nth0(IRangee, Colonne, Value).
 
+%adversaire/2
+%retourne la couleur de l'adversaire du jeton demandé
+adversaire(j,r).
+adversaire(r,j).
+
 %colonne_est_pleine/2
 %Retourne vrai si la colonne spécifié ne contient que des jetons. Retourne faux sinon.
 colonne_est_pleine(Grille,I) :- 
@@ -69,11 +74,26 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     nth0(0,Reste,V),
     not(V == v).
 
-
-aligneVertical4(Grille,Jeton) :-
+%aligneVertical/3
+aligneVertical(Grille,Jeton,Nb) :-
     matrix(Grille,R,C,Jeton),
-    R1 is R+1,R2 is R+2,R3 is R+3,
-    matrix(Grille,R1,C,Jeton),matrix(Grille,R2,C,Jeton),matrix(Grille,R3,C,Jeton).
+    Rprecedente is R-1, 
+    matrix(Grille,Rprecedente,C,v), %on verifie que l'element precedent est vide
+    %Cela signifie qu'on peut utiliser ce jeton pour gagner
+    R1 is R+1,
+    Nb1 is Nb-1,
+    write('R,C ='), write([R,C]), nl,
+    aligneVertical(Grille,Jeton,Nb1,R1,C).
+%aligneVertical/5
+aligneVertical(Grille,Jeton,0,R,C) :-
+    not(matrix(Grille,R,C,Jeton)).
+
+aligneVertical(Grille,Jeton,Nb,R,C) :-
+    matrix(Grille,R,C,Jeton),
+    R1 is R+1,
+    Nb1 is Nb-1,
+    aligneVertical(Grille,Jeton,Nb1,R1,C).
+
 
 
 %afficheGrille/1
