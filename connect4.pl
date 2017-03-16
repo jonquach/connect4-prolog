@@ -18,8 +18,8 @@ go :- how_to_play,
 
 %strt(Grille)
 %Débute un tour avec une nouvelle grille. On vérifie si l'un des deux joueurs a gagné. Sinon, les joueurs jouent.
-strt(Grille) :- gagne(Grille,r), afficheGrille(Grille), nl, write('Rouge gagne!').
-strt(Grille) :- gagne(Grille,j), afficheGrille(Grille), nl, write('Jaune gagne!').
+strt(Grille) :- gagne(Grille,r), nl, write('Rouge gagne!'),afficheGrille(Grille).
+strt(Grille) :- gagne(Grille,j), nl, write('Jaune gagne!'),afficheGrille(Grille).
 strt(Grille) :-
     rJoue(Grille,Nouvelle_Grille1),
     afficheGrille(Nouvelle_Grille1),
@@ -30,6 +30,7 @@ strt(Grille) :-
 %rJoue/2
 %le joueur rouge joue sur une grille et retourne la grille résultante
 rJoue(Grille,Nouvelle_Grille) :-
+    write('C\'est votre tour'),nl,
     read(N),
     place_jeton(r,N,Grille,Nouvelle_Grille).
 %jJoue/2
