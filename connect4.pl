@@ -1,14 +1,37 @@
 %Go/0
 %Prédicat démarant la partie
 go :- how_to_play,
-    strt(
-    [[v,v,v,v,v,v],
+    afficheGrille( [[v,v,v,v,v,v],
+    [v,v,v,v,v,v],
+    [v,v,v,v,v,v],
+    [v,v,v,v,v,v],
+    [v,v,v,v,v,v],
+    [v,v,v,v,v,v],
+    [v,v,v,v,v,v]]),
+    strt( [[v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v]]).
+
+strt(Grille) :- gagne(Grille,r), afficheGrille(Grille), nl, write('Rouge gagne!').
+strt(Grille) :- gagne(Grille,j), afficheGrille(Grille), nl, write('Jaune gagne!').
+strt(Grille) :-
+    rJoue(Grille,Nouvelle_Grille1),
+    afficheGrille(Nouvelle_Grille1),
+    jJoue(Nouvelle_Grille1,Nouvelle_Grille2),
+    afficheGrille(Nouvelle_Grille2),
+    strt(Nouvelle_Grille2).
+
+rJoue(Grille,Nouvelle_Grille) :-
+    read(N),
+    place_jeton(r,N,Grille,Nouvelle_Grille).
+
+jJoue(Grille,Nouvelle_Grille) :-
+    read(N),
+    place_jeton(j,N,Grille,Nouvelle_Grille).
 
 
 %how_to_play/0
@@ -237,7 +260,6 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
     I2 is I+1,
     afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I2).
     
-strt(Grille) :- afficheGrille(Grille).
 
 
 
