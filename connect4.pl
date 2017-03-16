@@ -14,18 +14,20 @@ go :- how_to_play,
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
     [v,v,v,v,v,v],
-    [v,v,v,v,v,v]]).
+    [v,v,v,v,v,v]],r).
 
-%strt(Grille)
-%Débute un tour avec une nouvelle grille. On vérifie si l'un des deux joueurs a gagné. Sinon, les joueurs jouent.
-strt(Grille) :- gagne(Grille,r), nl, write('Rouge gagne!'),afficheGrille(Grille).
-strt(Grille) :- gagne(Grille,j), nl, write('Jaune gagne!'),afficheGrille(Grille).
-strt(Grille) :-
-    rJoue(Grille,Nouvelle_Grille1),
-    afficheGrille(Nouvelle_Grille1),
-    jJoue(Nouvelle_Grille1,Nouvelle_Grille2),
-    afficheGrille(Nouvelle_Grille2),
-    strt(Nouvelle_Grille2).
+%strt/2
+%Débute un tour avec une nouvelle grille pour un joueur. On vérifie si le joueur précédent a gagné. Sinon, les joueurs jouent.
+strt(Grille,j) :- gagne(Grille,r), nl, write('Rouge gagne!'),afficheGrille(Grille).
+strt(Grille,r) :- gagne(Grille,j), nl, write('Jaune gagne!'),afficheGrille(Grille).
+strt(Grille,r) :-
+    rJoue(Grille,Nouvelle_Grille),
+    afficheGrille(Nouvelle_Grille),
+    strt(Nouvelle_Grille,j).
+strt(Grille,j) :-
+    jJoue(Grille,Nouvelle_Grille),
+    afficheGrille(Nouvelle_Grille),
+    strt(Nouvelle_Grille,r).
 
 %rJoue/2
 %le joueur rouge joue sur une grille et retourne la grille résultante
@@ -34,7 +36,7 @@ rJoue(Grille,Nouvelle_Grille) :-
     read(N),
     place_jeton(r,N,Grille,Nouvelle_Grille).
 %jJoue/2
-%Le joueur jaune joue sur une grille et retourne la grille résultante.
+%Le joueur jaune (IA) joue sur une grille et retourne la grille résultante.
 jJoue(Grille,Nouvelle_Grille) :-
     read(N),
     place_jeton(j,N,Grille,Nouvelle_Grille).
