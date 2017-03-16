@@ -304,7 +304,7 @@ coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss]) :-
     place_jeton(Jeton,0, Grille, RetourPlaceJeton),
     coupsPossibles(Grille, Jeton, RetourCoupPoss,1).
 %Cas ou on ne peut pas placer le jeton
-coupsPossibles(Grille, Jeton, [RetourCoupPoss]) :-
+coupsPossibles(Grille, Jeton, RetourCoupPoss) :-
     not(place_jeton(Jeton,0, Grille, _)),
     coupsPossibles(Grille, Jeton, RetourCoupPoss,1).
 
@@ -318,7 +318,7 @@ coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol) :-
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
 %Cas ou on ne peut pas placer le jeton
-coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol) :-
+coupsPossibles(Grille, Jeton, RetourCoupPoss, NoCol) :-
     not(place_jeton(Jeton,NoCol, Grille, _)),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
