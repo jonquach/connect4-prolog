@@ -22,6 +22,7 @@ how_to_play :-
 
 %matrix/4
 %Dans la grille, récupère la valeur à l'indice de la colonne et de la rangée désiré, et la mets dans Value
+%Source:http://stackoverflow.com/questions/34949724/prolog-iterate-through-matrix
 matrix(Grille, IRangee,IColonne, Value) :-
     nth0(IColonne, Grille, Colonne),
     nth0(IRangee, Colonne, Value).
@@ -73,6 +74,34 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Courant|Retour]) :-
 place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     nth0(0,Reste,V),
     not(V == v).
+
+%gagne/2
+gagne(Grille,Jeton) :-
+    aligneVerticalPourVictoire(Grille,Jeton);
+    aligneHorizontalPourVictoire(Grille,Jeton);
+    aligneDiagonalDPourVictoire(Grille,Jeton);
+    aligneDiagonalMPourVictoire(Grille,Jeton).
+
+aligneVerticalPourVictoire(Grille,Jeton) :-
+    matrix(Grille,R,C,Jeton),
+    R1 is R+1,
+    aligneVertical(Grille,Jeton,3,R1,C).
+
+aligneHorizontalPourVictoire(Grille,Jeton) :-
+    matrix(Grille,R,C,Jeton),
+    C1 is C+1,
+    aligneHorizontal(Grille,Jeton,3,R,C1).
+
+aligneDiagonalDPourVictoire(Grille,Jeton) :-
+    matrix(Grille,R,C,Jeton),
+    C1 is C+1,R1 is R+1,
+    aligneDiagonalD(Grille,Jeton,3,R1,C1).
+
+aligneDiagonalMPourVictoire(Grille,Jeton) :-
+    matrix(Grille,R,C,Jeton),
+    C1 is C+1,R1 is R-1,
+    aligneDiagonalM(Grille,Jeton,3,R1,C1).
+
 
 
 %aligneVertical/3
