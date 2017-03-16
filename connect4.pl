@@ -20,6 +20,7 @@ go :- how_to_play,
 %Débute un tour avec une nouvelle grille pour un joueur. On vérifie si le joueur précédent a gagné. Sinon, les joueurs jouent.
 strt(Grille,j) :- gagne(Grille,r), nl, write('Rouge gagne!'),afficheGrille(Grille).
 strt(Grille,r) :- gagne(Grille,j), nl, write('Jaune gagne!'),afficheGrille(Grille).
+strt(Grille,_) :- grille_est_pleine(Grille), nl, write('Partie nulle!'),afficheGrille(Grille).
 strt(Grille,r) :-
     rJoue(Grille,Nouvelle_Grille),
     afficheGrille(Nouvelle_Grille),
@@ -72,6 +73,11 @@ colonne_est_pleine(Grille,I) :-
 %Retourne vrai si la colonne en paramètres ne contient que des jetons
 colonne_est_pleine(Colonne) :-
     not(member(v,Colonne)).
+
+%grille_est_pleine/1
+%Retourne vrai si la grille est pleine
+grille_est_pleine([C1,C2,C3,C4,C5,C6,C7]) :- 
+    not(member(v,C1)),not(member(v,C2)),not(member(v,C3)),not(member(v,C4)),not(member(v,C5)),not(member(v,C6)),not(member(v,C7)).
 
 
 %place_jeton/4
