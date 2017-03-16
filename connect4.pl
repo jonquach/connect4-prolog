@@ -114,6 +114,9 @@ gagne(Grille,Jeton) :-
     aligneDiagonalDPourVictoire(Grille,Jeton);
     aligneDiagonalMPourVictoire(Grille,Jeton).
 
+
+%%%%%Alignements%%%%%%%
+
 %aligneVerticalPourVictoire/2
 %Vérifie qu'un alignement vertical existe, mais enlève la restriction que la case précédente dois être vide
 aligneVerticalPourVictoire(Grille,Jeton) :-
@@ -240,6 +243,18 @@ alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante) :-
     (not(matrix(Grille,Rprecedente,Cprecedente,Jeton)),matrix(Grille,Rsuivante,Csuivante,v));
     (matrix(Grille,Rprecedente,Cprecedente,v),not(matrix(Grille,Rsuivante,Csuivante,Jeton))).
 
+%alignementExiste/4
+%Vérifie si un alignement d'un certain nombre de jeton d'un type existe dans la grille
+alignementExiste(Grille,Jeton,Nb) :-
+    aligneVertical(Grille,Jeton,Nb);
+    aligneHorizontal(Grille,Jeton,Nb);
+    aligneDiagonalD(Grille,Jeton,Nb);
+    aligneDiagonalM(Grille,Jeton,Nb).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%Affichage de la grille%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %afficheGrille/1
 %Affiche la grille au complet
 afficheGrille([C1,C2,C3,C4,C5,C6,C7]) :- 
@@ -277,6 +292,9 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
     afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I2).
     
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%Partie IA %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %coupPossibles\3
@@ -305,4 +323,23 @@ coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol) :-
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
 
+%valeurHeuristique
+valeurPourJoueur(Grille,Joueur,1000) :-
+    gagne(Grille,Joueur).
+valeurPourJoueur(Grille,Joueur,Valeur) :-
+    not(gagne(Grille,Joueur)),
+    valeurPourJoueurRec(Grille,Joueur,3,Valeur).
 
+valeurPourJoueurRec(Grille,Joueur,1,1) :-
+    alignementExiste(Grille,Joueur,1).
+valeurPourJoueurRec(Grille,Joueur,1,0) :-
+    not(alignementExiste(Grille,Joueur,1)).
+valeurPourJoueurRec(Grille,Joueur,Nb,Valeur) :-
+    alignementExiste(Grille,Joueur,Nb),
+    Exposant is Nb-2,
+    pow(10,Exposant,Puissance),
+    Valeur is 5*Puissance.
+valeurPourJoueurRec(Grille,Joueur,Nb,Valeur) :-
+    not(alignementExiste(Grille,Joueur,Nb)),
+    Nb1 is Nb-1,
+    valeurPourJoueurRec(Grille,Joueur,Nb1,Valeur).   
