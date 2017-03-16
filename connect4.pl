@@ -16,6 +16,8 @@ go :- how_to_play,
     [v,v,v,v,v,v],
     [v,v,v,v,v,v]]).
 
+%strt(Grille)
+%Débute un tour avec une nouvelle grille. On vérifie si l'un des deux joueurs a gagné. Sinon, les joueurs jouent.
 strt(Grille) :- gagne(Grille,r), afficheGrille(Grille), nl, write('Rouge gagne!').
 strt(Grille) :- gagne(Grille,j), afficheGrille(Grille), nl, write('Jaune gagne!').
 strt(Grille) :-
@@ -25,10 +27,13 @@ strt(Grille) :-
     afficheGrille(Nouvelle_Grille2),
     strt(Nouvelle_Grille2).
 
+%rJoue/2
+%le joueur rouge joue sur une grille et retourne la grille résultante
 rJoue(Grille,Nouvelle_Grille) :-
     read(N),
     place_jeton(r,N,Grille,Nouvelle_Grille).
-
+%jJoue/2
+%Le joueur jaune joue sur une grille et retourne la grille résultante.
 jJoue(Grille,Nouvelle_Grille) :-
     read(N),
     place_jeton(j,N,Grille,Nouvelle_Grille).
@@ -99,27 +104,35 @@ place_jeton_sur_colonne(Jeton,[Courant|Reste],[Jeton|Reste]) :-
     not(V == v).
 
 %gagne/2
+%Vérifie si le Jeton gagne sur la Grille
 gagne(Grille,Jeton) :-
     aligneVerticalPourVictoire(Grille,Jeton);
     aligneHorizontalPourVictoire(Grille,Jeton);
     aligneDiagonalDPourVictoire(Grille,Jeton);
     aligneDiagonalMPourVictoire(Grille,Jeton).
 
+%aligneVerticalPourVictoire/2
+%Vérifie qu'un alignement vertical existe, mais enlève la restriction que la case précédente dois être vide
 aligneVerticalPourVictoire(Grille,Jeton) :-
     matrix(Grille,R,C,Jeton),
     R1 is R+1,
     aligneVertical(Grille,Jeton,3,R1,C).
 
+%aligneHorizontalPourVictoire/2
+%Vérifie qu'un alignement horizontal existe, mais enlève la restriction que la case précédente ou suivante dois être vide
 aligneHorizontalPourVictoire(Grille,Jeton) :-
     matrix(Grille,R,C,Jeton),
     C1 is C+1,
     aligneHorizontal(Grille,Jeton,3,R,C1).
 
+%aligneDiagonalDPourVictoire/2
+%Vérifie qu'un alignement diagonal descendant existe, mais enlève la restriction que la case précédente ou suivante dois être vide
 aligneDiagonalDPourVictoire(Grille,Jeton) :-
     matrix(Grille,R,C,Jeton),
     C1 is C+1,R1 is R+1,
     aligneDiagonalD(Grille,Jeton,3,R1,C1).
-
+%aligneDiagonalMPourVictoire/2
+%Vérifie qu'un alignement diagonal montant existe, mais enlève la restriction que la case précédente ou suivante dois être vide
 aligneDiagonalMPourVictoire(Grille,Jeton) :-
     matrix(Grille,R,C,Jeton),
     C1 is C+1,R1 is R-1,
@@ -217,8 +230,8 @@ aligneDiagonalM(Grille,Jeton,Nb,R,C) :-
 
 
 %alignementEstValide/4
-%Un alignement est utilisable si la case à gauche et/ou à droite de la rangée est vide ou
-%Si la case précédente est vide et la case suivante n'est pas occupé par le jeton ou vice-versa
+%Un alignement est utilisable si la case à gauche et à droite de la rangée est vide ou
+%Si la case précédente n'est pas utilisé par le jeton et la case suivante est vide ou vice-versa
 alignementEstValide(Grille,Jeton,Cprecedente,Csuivante,Rprecedente,Rsuivante) :-
     (matrix(Grille,Rprecedente,Cprecedente,v),matrix(Grille,Rsuivante,Csuivante,v));
     (not(matrix(Grille,Rprecedente,Cprecedente,Jeton)),matrix(Grille,Rsuivante,Csuivante,v));
@@ -264,22 +277,26 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 
 
 %coupPossibles\3
+%Vérifie quels coups sont possibles à partir de la première colonne d'une grille pour un jeton donné
+%Cas ou on peut placer le jeton
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss]) :-
     place_jeton(Jeton,0, Grille, RetourPlaceJeton),
     coupsPossibles(Grille, Jeton, RetourCoupPoss,1).
-
+%Cas ou on ne peut pas placer le jeton
 coupsPossibles(Grille, Jeton, [RetourCoupPoss]) :-
     not(place_jeton(Jeton,0, Grille, _)),
     coupsPossibles(Grille, Jeton, RetourCoupPoss,1).
 
 %coupsPossibles\4
+%Vérifie quels coups sont possibles à partir d'une colonne spécifié d'une grille pour un jeton donné.
+%Cas de base: La 7eme colonne est la dernière (et les indexs sont décalés)
 coupsPossibles(_,_,[],7).
-
+%Cas ou on peut placer le jeton
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol) :-
     place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
-
+%Cas ou on ne peut pas placer le jeton
 coupsPossibles(Grille, Jeton, [RetourCoupPoss], NoCol) :-
     not(place_jeton(Jeton,NoCol, Grille, _)),
     C1 is NoCol + 1,
