@@ -302,9 +302,11 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 %%%%%%Partie IA %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%cas des feuilles
 minimax(Grille,Joueur, _, Valeur ) :-
 		(gagne(Grille,Joueur);grille_est_pleine(Grille)),
         valeurGrille(Grille,Valeur).
+%%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
         coupsPossibles( Grille,r,ListeGrille),
         write('Noeud').
