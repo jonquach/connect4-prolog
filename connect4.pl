@@ -304,32 +304,47 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 
 %%cas des feuilles
 minimax(Grille,Joueur, _, Valeur ) :-
+        %un noeud n'as pas d'enfant si le joueur gagne ou si la partie est nulle
 		(gagne(Grille,Joueur);grille_est_pleine(Grille)),
         valeurGrille(Grille,Valeur).
 %%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
-        coupsPossibles( Grille,r,ListeGrille),
-        write('Noeud').
+        coupsPossibles( Grille,Joueur,ListeGrille),
+        meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
+
+% Trouver la meilleure etape :
+% 1) on calcule la valeur de chacune des etapes,
+% 2) on recherche la valeur maximum,
+% 3) on retourne cette valeur et l'etape correspondant a cette valeur
+meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
+		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
+		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
 
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
 % Valeur
-rechercheMeilleurSuccesseur(Joueur,[Etape], [Valeur], Valeur, Etape ) :- !.
+rechercheMeilleurSuccesseur(_,[Etape], [Valeur], Valeur, Etape ) :- !.
 rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], MV, ME ) :-
 		meilleur_de(Joueur,E1, V1, E2, V2, E, V),
 		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
 
+% Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
+calculeValeurs( [], [] ).
+calculeValeurs( [ Grille | ListeGrille ],Joueur,[Valeur|ListeValeurs] ) :-
+        adversaire(Joueur,Adversaire),
+		minimax( Grille,Adversaire, _, Valeur ),
+		calculeValeurs( ListeGrille, ListeValeurs ).
+
 % Pour faire remonter les valeurs des feuilles vers la racine
-% Si c'est a Min de jouer alors Max (avant lui) va choisir la plus grande valeur
-% Si c'est a Max de jouer alors Min (avant lui) va choisir la plus petite valeur
-%Min:Rouge est le joueur
-meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
-		Valeur1 > Valeur2, !.
-meilleur_de(r, Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
-		Valeur1 < Valeur2, !.
-%Max:Jaune est l'IA
+%Le premier paramètre représente le joueur qui joue présentement et qui recherche sa valeur préféré
+%Si c'est à jaune de jouer, il veut l'étape avec la plus grande valeur
+%Si c'est à rouge de jouer, il veut l'étape avec la plus petite valeur
 meilleur_de(j,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
+		Valeur1 > Valeur2, !.
+meilleur_de(j, Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
 		Valeur1 < Valeur2, !.
-meilleur_de(j,Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
+meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
+		Valeur1 < Valeur2, !.
+meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
 		Valeur1 > Valeur2, !.
 
 %coupPossibles\3
