@@ -311,6 +311,27 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
         coupsPossibles( Grille,r,ListeGrille),
         write('Noeud').
 
+% Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
+% Valeur
+rechercheMeilleurSuccesseur(Joueur,[Etape], [Valeur], Valeur, Etape ) :- !.
+rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], MV, ME ) :-
+		meilleur_de(Joueur,E1, V1, E2, V2, E, V),
+		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
+
+% Pour faire remonter les valeurs des feuilles vers la racine
+% Si c'est a Min de jouer alors Max (avant lui) va choisir la plus grande valeur
+% Si c'est a Max de jouer alors Min (avant lui) va choisir la plus petite valeur
+%Min:Rouge est le joueur
+meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
+		Valeur1 > Valeur2, !.
+meilleur_de(r, Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
+		Valeur1 < Valeur2, !.
+%Max:Jaune est l'IA
+meilleur_de(j,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
+		Valeur1 < Valeur2, !.
+meilleur_de(j,Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
+		Valeur1 > Valeur2, !.
+
 %coupPossibles\3
 %Vérifie quels coups sont possibles à partir de la première colonne d'une grille pour un jeton donné
 %Cas ou on peut placer le jeton
