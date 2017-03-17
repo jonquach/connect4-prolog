@@ -302,6 +302,12 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 %%%%%%Partie IA %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+minimax(Grille,Joueur, _, Valeur ) :-
+		(gagne(Grille,Joueur);grille_est_pleine(Grille)),
+        valeurGrille(Grille,Valeur).
+minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
+        coupsPossibles( Grille,r,ListeGrille),
+        write('Noeud').
 
 %coupPossibles\3
 %Vérifie quels coups sont possibles à partir de la première colonne d'une grille pour un jeton donné
@@ -309,6 +315,7 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss]) :-
     place_jeton(Jeton,0, Grille, RetourPlaceJeton),
     coupsPossibles(Grille, Jeton, RetourCoupPoss,1).
+
 %Cas ou on ne peut pas placer le jeton
 coupsPossibles(Grille, Jeton, RetourCoupPoss) :-
     not(place_jeton(Jeton,0, Grille, _)),
@@ -329,7 +336,9 @@ coupsPossibles(Grille, Jeton, RetourCoupPoss, NoCol) :-
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
 
-%valeurHeuristique
+%%%%%valeurHeuristique%%%%
+%valeurPourJoueur\3
+%Retourne la valeure d'une grille selon les alignements pour un certain joueur
 valeurPourJoueur(Grille,Joueur,1000) :-
     gagne(Grille,Joueur).
 valeurPourJoueur(Grille,Joueur,Valeur) :-
@@ -350,7 +359,8 @@ valeurPourJoueurRec(Grille,Joueur,Nb,Valeur) :-
     Nb1 is Nb-1,
     valeurPourJoueurRec(Grille,Joueur,Nb1,Valeur). 
 
-%valeurGrille
+%valeurGrille\2
+%Retourne la valeur heuristique d'une grille en prenant en compte les deux joueur, j étant l'IA
 valeurGrille(Grille,Valeur) :-
     valeurPourJoueur(Grille,r,ValeurR),
     valeurPourJoueur(Grille,j,ValeurJ),
