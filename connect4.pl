@@ -348,4 +348,10 @@ valeurPourJoueurRec(Grille,Joueur,Nb,Valeur) :-
 valeurPourJoueurRec(Grille,Joueur,Nb,Valeur) :-
     not(alignementExiste(Grille,Joueur,Nb)),
     Nb1 is Nb-1,
-    valeurPourJoueurRec(Grille,Joueur,Nb1,Valeur).   
+    valeurPourJoueurRec(Grille,Joueur,Nb1,Valeur). 
+
+%valeurGrille
+valeurGrille(Grille,Valeur) :-
+    valeurPourJoueur(Grille,r,ValeurR),
+    valeurPourJoueur(Grille,j,ValeurJ),
+    Valeur is ValeurJ-ValeurR.
