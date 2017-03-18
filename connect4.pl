@@ -23,11 +23,11 @@ strt(Grille,r) :- gagne(Grille,j), nl, write('Jaune gagne!'),nl,afficheGrille(Gr
 strt(Grille,_) :- grille_est_pleine(Grille), nl, write('Partie nulle!'),afficheGrille(Grille).
 strt(Grille,r) :-
     rJoue(Grille,Nouvelle_Grille),
-    afficheGrille(Nouvelle_Grille),
+    afficheGrille(Nouvelle_Grille),nl,nl,
     strt(Nouvelle_Grille,j).
 strt(Grille,j) :-
     jJoue(Grille,Nouvelle_Grille),
-    afficheGrille(Nouvelle_Grille),
+    afficheGrille(Nouvelle_Grille),nl,nl,
     strt(Nouvelle_Grille,r).
 
 %rJoue/2
@@ -39,8 +39,7 @@ rJoue(Grille,Nouvelle_Grille) :-
 %jJoue/2
 %Le joueur jaune (IA) joue sur une grille et retourne la grille résultante.
 jJoue(Grille,Nouvelle_Grille) :-
-    read(N),
-    place_jeton(j,N,Grille,Nouvelle_Grille).
+    minimax(Grille,j,Nouvelle_Grille,_).
 
 
 %how_to_play/0
