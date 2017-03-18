@@ -312,6 +312,14 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
         coupsPossibles(Grille,Joueur,ListeGrille),
         meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
 
+minimax(Grille,Joueur,_,Valeur,Profondeur) :-
+        (gagne(Grille,Joueur);grille_est_pleine(Grille);Profondeur == 0),
+        valeurGrille(Grille,Valeur).
+
+minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_,Profondeur) :-
+        coupsPossibles(Grille,Joueur,ListeGrille),
+        meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_,Profondeur).
+
 % Trouver la meilleure etape :
 % 1) on calcule la valeur de chacune des etapes,
 % 2) on recherche la valeur maximum,
@@ -319,15 +327,26 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
 meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
 		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
 		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
+meilleur( ListeEtapes,Joueur, MS, Valeur, Profondeur) :-
+		calculeValeurs( ListeEtapes,Joueur, ListeValeurs,Profondeur),
+		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
 
 % Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
 calculeValeurs( [], _,[] ).
 calculeValeurs( [ Grille | ListeGrille ],j,[Valeur|ListeValeurs] ) :-
-		minimax( Grille,r, _, Valeur ),
-		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
+		minimax( Grille,r, _, Valeur,2),
+		calculeValeurs( ListeGrille, j,ListeValeurs ).
 calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs] ) :-
-		minimax( Grille,j, _, Valeur ),
-		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
+		minimax( Grille,j, _, Valeur,2),
+		calculeValeurs( ListeGrille, r,ListeValeurs ).
+calculeValeurs( [ Grille | ListeGrille ],j,[Valeur|ListeValeurs],Profondeur ) :-
+        P2 is Profondeur - 1,
+		minimax( Grille,r, _, Valeur,P2 ),
+		calculeValeurs( ListeGrille, j,ListeValeurs ).
+calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs],Profondeur ) :-
+        P2 is Profondeur -1,
+		minimax( Grille,j, _, Valeur ,P2),
+		calculeValeurs( ListeGrille, r,ListeValeurs ).
 
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
 % Valeur
