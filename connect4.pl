@@ -320,7 +320,7 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
 % 3) on retourne cette valeur et l'etape correspondant a cette valeur
 meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
 		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
-		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
+		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS).
 
 % Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
 calculeValeurs( [], _,[] ).
@@ -334,8 +334,8 @@ calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs] ) :-
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
 % Valeur
 rechercheMeilleurSuccesseur(_,[Etape], [Valeur], Valeur, Etape ) :- !.
-rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], MV, ME ) :-
-		meilleur_de(Joueur,E1, V1, E2, V2, E, V),
+rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], E, V ) :-
+		meilleur_de(Joueur,E1, V1, E2, V2, E, V).
 		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
 
 % Pour faire remonter les valeurs des feuilles vers la racine
@@ -345,9 +345,9 @@ rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], M
 meilleur_de(j,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
 		Valeur1 > Valeur2, !.
 meilleur_de(j, Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
-		Valeur1 < Valeur2, !.
+		Valeur1 =< Valeur2, !.
 meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape1, Valeur1) :-
-		Valeur1 < Valeur2, !.
+		Valeur1 =< Valeur2, !.
 meilleur_de(r,Etape1, Valeur1, Etape2, Valeur2, Etape2, Valeur2) :-
 		Valeur1 > Valeur2, !.
 
