@@ -18,8 +18,8 @@ go :- how_to_play,
 
 %strt/2
 %Débute un tour avec une nouvelle grille pour un joueur. On vérifie si le joueur précédent a gagné. Sinon, les joueurs jouent.
-strt(Grille,j) :- gagne(Grille,r), nl, write('Rouge gagne!'),afficheGrille(Grille).
-strt(Grille,r) :- gagne(Grille,j), nl, write('Jaune gagne!'),afficheGrille(Grille).
+strt(Grille,j) :- gagne(Grille,r), nl, write('Rouge gagne!'),nl,afficheGrille(Grille).
+strt(Grille,r) :- gagne(Grille,j), nl, write('Jaune gagne!'),nl,afficheGrille(Grille).
 strt(Grille,_) :- grille_est_pleine(Grille), nl, write('Partie nulle!'),afficheGrille(Grille).
 strt(Grille,r) :-
     rJoue(Grille,Nouvelle_Grille),
@@ -309,7 +309,8 @@ minimax(Grille,Joueur, _, Valeur ) :-
         valeurGrille(Grille,Valeur).
 %%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
-        coupsPossibles( Grille,Joueur,ListeGrille),
+        write('minimax noeud'),
+        coupsPossibles(Grille,Joueur,ListeGrille),
         meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
 
 % Trouver la meilleure etape :
@@ -317,6 +318,7 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
 % 2) on recherche la valeur maximum,
 % 3) on retourne cette valeur et l'etape correspondant a cette valeur
 meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
+        write('meilleur'),
 		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
 		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
 
@@ -328,11 +330,11 @@ rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], M
 		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
 
 % Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
-calculeValeurs( [], [] ).
+calculeValeurs( [], _,[] ).
 calculeValeurs( [ Grille | ListeGrille ],Joueur,[Valeur|ListeValeurs] ) :-
         adversaire(Joueur,Adversaire),
 		minimax( Grille,Adversaire, _, Valeur ),
-		calculeValeurs( ListeGrille, ListeValeurs ).
+		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
 
 % Pour faire remonter les valeurs des feuilles vers la racine
 %Le premier paramètre représente le joueur qui joue présentement et qui recherche sa valeur préféré
