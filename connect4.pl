@@ -309,7 +309,6 @@ minimax(Grille,Joueur, _, Valeur ) :-
         valeurGrille(Grille,Valeur).
 %%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
-        write('minimax noeud'),
         coupsPossibles(Grille,Joueur,ListeGrille),
         meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
 
@@ -318,9 +317,17 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
 % 2) on recherche la valeur maximum,
 % 3) on retourne cette valeur et l'etape correspondant a cette valeur
 meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
-        write('meilleur'),
 		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
 		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
+
+% Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
+calculeValeurs( [], _,[] ).
+calculeValeurs( [ Grille | ListeGrille ],j,[Valeur|ListeValeurs] ) :-
+		minimax( Grille,r, _, Valeur ),
+		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
+calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs] ) :-
+		minimax( Grille,j, _, Valeur ),
+		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
 
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
 % Valeur
@@ -328,13 +335,6 @@ rechercheMeilleurSuccesseur(_,[Etape], [Valeur], Valeur, Etape ) :- !.
 rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], MV, ME ) :-
 		meilleur_de(Joueur,E1, V1, E2, V2, E, V),
 		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
-
-% Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
-calculeValeurs( [], _,[] ).
-calculeValeurs( [ Grille | ListeGrille ],Joueur,[Valeur|ListeValeurs] ) :-
-        adversaire(Joueur,Adversaire),
-		minimax( Grille,Adversaire, _, Valeur ),
-		calculeValeurs( ListeGrille, Joueur,ListeValeurs ).
 
 % Pour faire remonter les valeurs des feuilles vers la racine
 %Le premier paramètre représente le joueur qui joue présentement et qui recherche sa valeur préféré
@@ -367,11 +367,13 @@ coupsPossibles(Grille, Jeton, RetourCoupPoss) :-
 coupsPossibles(_,_,[],7).
 %Cas ou on peut placer le jeton
 coupsPossibles(Grille, Jeton, [RetourPlaceJeton|RetourCoupPoss], NoCol) :-
+    NoCol < 7,
     place_jeton(Jeton,NoCol, Grille, RetourPlaceJeton),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
 %Cas ou on ne peut pas placer le jeton
 coupsPossibles(Grille, Jeton, RetourCoupPoss, NoCol) :-
+    NoCol < 7,
     not(place_jeton(Jeton,NoCol, Grille, _)),
     C1 is NoCol + 1,
     coupsPossibles(Grille, Jeton, RetourCoupPoss, C1).
