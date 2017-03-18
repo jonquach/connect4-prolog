@@ -303,22 +303,16 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%cas des feuilles
-minimax(Grille,Joueur, _, Valeur ) :-
+%minimax(Grille,Joueur,_, Valeur ) :-
         %un noeud n'as pas d'enfant si le joueur gagne ou si la partie est nulle
-		(gagne(Grille,Joueur);grille_est_pleine(Grille)),
-        valeurGrille(Grille,Valeur).
+%		(gagne(Grille,Joueur);grille_est_pleine(Grille)),
+%        valeurGrille(Grille,Valeur).
 %%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
         coupsPossibles(Grille,Joueur,ListeGrille),
+        write('coupsPossibles passe'),
         meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
 
-minimax(Grille,Joueur,_,Valeur,Profondeur) :-
-        (gagne(Grille,Joueur);grille_est_pleine(Grille);Profondeur == 0),
-        valeurGrille(Grille,Valeur).
-
-minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_,Profondeur) :-
-        coupsPossibles(Grille,Joueur,ListeGrille),
-        meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_,Profondeur).
 
 % Trouver la meilleure etape :
 % 1) on calcule la valeur de chacune des etapes,
@@ -327,25 +321,14 @@ minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_,Profondeur) :-
 meilleur( ListeEtapes,Joueur, MS, Valeur ) :-
 		calculeValeurs( ListeEtapes,Joueur, ListeValeurs ),
 		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
-meilleur( ListeEtapes,Joueur, MS, Valeur, Profondeur) :-
-		calculeValeurs( ListeEtapes,Joueur, ListeValeurs,Profondeur),
-		rechercheMeilleurSuccesseur( Joueur, ListeEtapes, ListeValeurs, Valeur, MS ).
 
 % Calcule la valeur minimax pour chaque etape de la liste. On change de joueur.
 calculeValeurs( [], _,[] ).
 calculeValeurs( [ Grille | ListeGrille ],j,[Valeur|ListeValeurs] ) :-
-		minimax( Grille,r, _, Valeur,2),
+		valeurGrille(Grille,Valeur),
 		calculeValeurs( ListeGrille, j,ListeValeurs ).
 calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs] ) :-
-		minimax( Grille,j, _, Valeur,2),
-		calculeValeurs( ListeGrille, r,ListeValeurs ).
-calculeValeurs( [ Grille | ListeGrille ],j,[Valeur|ListeValeurs],Profondeur ) :-
-        P2 is Profondeur - 1,
-		minimax( Grille,r, _, Valeur,P2 ),
-		calculeValeurs( ListeGrille, j,ListeValeurs ).
-calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs],Profondeur ) :-
-        P2 is Profondeur -1,
-		minimax( Grille,j, _, Valeur ,P2),
+		valeurGrille(Grille,Valeur),
 		calculeValeurs( ListeGrille, r,ListeValeurs ).
 
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
