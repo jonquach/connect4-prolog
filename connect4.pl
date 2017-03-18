@@ -310,7 +310,6 @@ afficheGrilleRec([C1,C2,C3,C4,C5,C6,C7],I) :-
 %%cas des noeuds
 minimax(Grille,Joueur,MeilleurSuccesseur,Valeur_) :-
         coupsPossibles(Grille,Joueur,ListeGrille),
-        write('coupsPossibles passe'),
         meilleur(ListeGrille,Joueur,MeilleurSuccesseur,Valeur_).
 
 
@@ -334,9 +333,9 @@ calculeValeurs( [ Grille | ListeGrille ],r,[Valeur|ListeValeurs] ) :-
 % Recherche l'etape dans la liste ListeEtapes ayant la valeur donnee par
 % Valeur
 rechercheMeilleurSuccesseur(_,[Etape], [Valeur], Valeur, Etape ) :- !.
-rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], E, V ) :-
-		meilleur_de(Joueur,E1, V1, E2, V2, E, V).
-		rechercheMeilleurSuccesseur(Joueur, [E|ListeEtapes], [V|ListeValeurs], MV, ME).
+rechercheMeilleurSuccesseur(Joueur, [E1,E2|ListeEtapes], [V1,V2|ListeValeurs], MV, ME) :-
+		meilleur_de(Joueur,E1, V1, E2, V2, Etape, Valeur),
+		rechercheMeilleurSuccesseur(Joueur, [Etape|ListeEtapes], [Valeur|ListeValeurs], MV, ME).
 
 % Pour faire remonter les valeurs des feuilles vers la racine
 %Le premier paramètre représente le joueur qui joue présentement et qui recherche sa valeur préféré
