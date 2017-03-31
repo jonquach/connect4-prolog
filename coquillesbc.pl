@@ -36,14 +36,37 @@ recherche_fait( Cond1 ou Cond2 ) :-
 
 
 %règles
-si ralenti(ordinateur) ou ecran_bleu(ordinateur) alors probleme(memoire_vive).
+si ralenti(ordinateur) et ecran_bleu(ordinateur) alors probleme(memoire_vive).
 si ralenti(ordinateur) et bruit_anormal(disque) alors probleme(disque).
-si repond_plus(commandes) et fige_aleatoirement(ordinateur) alors ralenti(ordinateur).
+si not(repond(commandes)) ou fige_aleatoirement(ordinateur) alors ralenti(ordinateur).
 si chaud(ordinateur) et arrete_brusquement(ordinateur) alors probleme(systeme_de_refroidissement).
-si allume(ecran) et affiche_rien(ecran) alors probleme(carte_video).
-si affiche_rien(ecran) ou allume_pas(ecran) alors probleme(ecran).
-si est_noir(ecran) et alimente(ecran) alors affiche_rien(ecran).
-si not(alimente(ecran)) ou defectueux(ecran) alors allume_pas(ecran).
+si allume(ecran) et not(affiche(ecran)) alors probleme(carte_video).
+si not(affiche(ecran)) ou not(allume(ecran)) alors probleme(ecran).
+si est_noir(ecran) et alimente(ecran) alors not(affiche(ecran)).
+si not(alimente(ecran)) ou defectueux(ecran) alors not(allume(ecran)).
 
 %faits
-not(alimente(ecran)).
+%Regle 1
+fait(ecran_bleu(ordinateur)).
+fait(ralenti(ordinateur)).
+%Regle 2
+fait(ralenti(ordinateur)).
+fait(bruit_anormal(disque)).
+%Regle 3
+fait(not(repond(commandes))).
+fait(fige_aleatoirement(ordinateur)).
+%Regle 4
+fait(chaud(ordinateur)).
+fait(arrete_brusquement(ordinateur)).
+%Regle 5
+fait(not(affiche(ecran))).
+fait(allume(ecran)).
+%Regle 6
+fait(not(affiche(ecran))).
+fait(not(allume(ecran))).
+%Regle 7
+fait(est_noir(ecran)).
+fait(alimente(ecran)).
+%Regle 8
+fait(not(alimente(ecran))).
+fait(defectueux(ecran)).
