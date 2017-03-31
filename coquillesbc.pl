@@ -1,4 +1,4 @@
-% Definition des operateurs
+﻿% Definition des operateurs
 :- op( 800, fx, si ),
    op( 700, xfx, alors ),
    op( 300, xfy, ou ),
@@ -34,3 +34,16 @@ recherche_fait( Cond1 et Cond2 ) :-
 recherche_fait( Cond1 ou Cond2 ) :-
  recherche_fait( Cond1 ) ; recherche_fait( Cond2 ).
 
+
+%règles
+si ralenti(ordinateur) ou ecran_bleu(ordinateur) alors probleme(memoire_vive).
+si ralenti(ordinateur) et bruit_anormal(disque) alors probleme(disque).
+si repond_plus(commandes) et fige_aleatoirement(ordinateur) alors ralenti(ordinateur).
+si chaud(ordinateur) et arrete_brusquement(ordinateur) alors probleme(systeme_de_refroidissement).
+si allume(ecran) et affiche_rien(ecran) alors probleme(carte_video).
+si affiche_rien(ecran) ou allume_pas(ecran) alors probleme(ecran).
+si est_noir(ecran) et alimente(ecran) alors affiche_rien(ecran).
+si not(alimente(ecran)) ou defectueux(ecran) alors allume_pas(ecran).
+
+%faits
+not(alimente(ecran)).
