@@ -47,26 +47,26 @@ si not(alimente(ecran)) ou defectueux(ecran) alors not(allume(ecran)).
 
 %faits
 %Regle 1
-fait(ecran_bleu(ordinateur)).
-fait(ralenti(ordinateur)).
+%fait(ecran_bleu(ordinateur)).
+%fait(ralenti(ordinateur)).
 %Regle 2
-fait(ralenti(ordinateur)).
-fait(bruit_anormal(disque)).
+%fait(ralenti(ordinateur)).
+%fait(bruit_anormal(disque)).
 %Regle 3
-fait(not(repond(commandes))).
-fait(fige_aleatoirement(ordinateur)).
+%fait(not(repond(commandes))).
+%fait(fige_aleatoirement(ordinateur)).
 %Regle 4
-fait(chaud(ordinateur)).
-fait(arrete_brusquement(ordinateur)).
+%fait(chaud(ordinateur)).
+%fait(arrete_brusquement(ordinateur)).
 %Regle 5
-fait(not(affiche(ecran))).
-fait(allume(ecran)).
+%fait(not(affiche(ecran))).
+%fait(allume(ecran)).
 %Regle 6
-fait(not(affiche(ecran))).
-fait(not(allume(ecran))).
+%fait(not(affiche(ecran))).
+%fait(not(allume(ecran))).
 %Regle 7
-fait(est_noir(ecran)).
-fait(alimente(ecran)).
+%fait(est_noir(ecran)).
+%fait(alimente(ecran)).
 %Regle 8
-fait(not(alimente(ecran))).
-fait(defectueux(ecran)).
+%fait(not(alimente(ecran))).
+%fait(defectueux(ecran)).
