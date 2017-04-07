@@ -39,10 +39,10 @@ recherche_fait( Cond1 ou Cond2 ) :-
 si ralenti(ordinateur) et ecran_bleu(ordinateur) alors probleme(memoire_vive).
 si ralenti(ordinateur) et bruit_anormal(disque) alors probleme(disque).
 si not(repond(commandes)) ou fige_aleatoirement(ordinateur) alors ralenti(ordinateur).
-si chaud(ordinateur) et arrete_brusquement(ordinateur) alors probleme(systeme_de_refroidissement).
-si demarre(ordinateur) et arrete_brusquement(ordinateur) alors probleme(bloc_alimentation).
+si chaud(ordinateur) et arrete_brusquement(ordinateur) alors probleme(systeme_de_refroidissement
 si allume(ecran) et not(affiche(ecran)) alors probleme(carte_video).
 si not(affiche(ecran)) ou not(allume(ecran)) alors probleme(ecran).
 si est_noir(ecran) et alimente(ecran) alors not(affiche(ecran)).
 si not(alimente(ecran)) ou defectueux(ecran) alors not(allume(ecran)).
+si demarre(ordinateur) et arrete_brusquement(ordinateur) alors probleme(bloc_alimentation).
 si est_bleu(ecran) et code_erreur(0x0001A) alors ecran_bleu(ordinateur).
