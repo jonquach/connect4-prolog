@@ -7,15 +7,19 @@ go :- readln(P),
 
 %Phrases de forme A
 p --> [Sujet],etre,[Qualificatif], 
-        {SEM =.. [Qualificatif,Sujet],write(SEM),assert(SEM)}.
+        {SEM =.. [Qualificatif,Sujet],
+        write(SEM),assert(SEM)}.
 
 %Phrases de forme B
 p --> t,[Sujet],etre,[Qualificatif],
-    {Consequence =..[Qualificatif,X],Condition =..[Sujet,X],assert(Consequence :- Condition),write(Consequence :- Condition)}.
+    {Consequence =..[Qualificatif,X],Condition =..[Sujet,X],
+    assert(Consequence :- Condition),
+    write(Consequence :- Condition)}.
 
 %Phrases de forme C
 p--> question, [Sujet],etre,[Qualificatif],
-    {SEM =.. [Qualificatif,Sujet],valide(SEM)}.
+    {SEM =.. [Qualificatif,Sujet],
+    valide(SEM)}.
 
 %valide/1
 %Valide si X est valide. Si oui, on écrit oui. Sinon, on écrit non.
